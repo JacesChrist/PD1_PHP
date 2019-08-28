@@ -35,6 +35,20 @@
 </div>
 
 <script type="text/javascript">
+
+    //cancella togliendo mouse
+    $('#table tr').each(function () {
+        $(this).find('td').each(function () {
+            var casella = $(this);
+            var slot = this.id;
+            $(this).mouseleave(function () {
+                if (slot != "day" && slot != "hour") {
+                    $(this).delay(100000).html("");
+                }
+            });
+        })
+    });
+
     //mostra email_user e timestamp passando mouse
     $('#table tr').each(function () {
         $(this).find('td').each(function () {
@@ -45,7 +59,7 @@
                     $.ajax({
                         url: "serverFunctions.php",
                         data: {
-                            postfunctions: 'checkUserBook',
+                            postfunctions: 'checkBook',
                             slot: slot
                         },
                         type: "POST",
@@ -62,32 +76,10 @@
                             casella.addClass('notfree');
                         }*/
                     });
-                    $.ajax({
-                        url: "serverFunctions.php",
-                        data: {
-                            postfunctions: 'checkTimeBook',
-                            slot: slot
-                        },
-                        type: "POST",
-                        dataType: "text"
-                    }).done(function (response) {
-                        //if(response != "FREE")
-                            casella.append('<br>' + response);
-                    });
                 }
             });
         })
     });
-    //cancella togliendo mouse
-    $('#table tr').each(function () {
-        $(this).find('td').each(function () {
-            var casella = $(this);
-            var slot = this.id;
-            $(this).mouseleave(function () {
-                if (slot != "day" && slot != "hour") {
-                    $(this).delay(100000).html("");
-                }
-            });
-        })
-    });
+
+    
 </script>

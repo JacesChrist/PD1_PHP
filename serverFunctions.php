@@ -18,7 +18,7 @@
 
     if(isset($_POST['postfunctions'])) {
         switch($_POST['postfunctions']){
-            case 'checkUserBook': {
+            case 'checkBook': {
                 $db = dbConnect();
                 $slot = $_POST['slot'];
                 //controllo che sia prenotato per evitare errori
@@ -30,23 +30,13 @@
                     $query = mysqli_query($db, $query);
                     $query = mysqli_fetch_array($query);
                     echo $query['user_email'];
-                }
-                //echo "FREE";
-                mysqli_close($db);
-                return;
-            }
-            case 'checkTimeBook': {
-                $db = dbConnect();
-                $slot = $_POST['slot'];
-                //controllo che sia prenotato per evitare errori
-                $query = "SELECT * FROM booking WHERE slot='$slot'";
-                $risultato = mysqli_query($db, $query);
-                $aaa = mysqli_num_rows($risultato);
-                if($aaa != 0) {
+                    $query = "SELECT * FROM booking WHERE slot='$slot'";
+                    $risultato = mysqli_query($db, $query);
+                    $aaa = mysqli_num_rows($risultato);
                     $query = "SELECT * FROM booking WHERE slot='$slot'";
                     $query = mysqli_query($db, $query);
                     $query = mysqli_fetch_array($query);
-                    echo $query['time'];
+                    echo "<br>" . $query['time'];
                 }
                 //echo "FREE";
                 mysqli_close($db);
@@ -206,5 +196,3 @@
     }
 
 ?>
-
-
