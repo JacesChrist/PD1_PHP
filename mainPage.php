@@ -3,9 +3,8 @@
     checkCookie();
     checkHttps();
     if(!checkSession()) {
-        header('Location: index.php');
-        echo "<script type='text/javascript'>alert('Session timeout<br>Please sign in again');</script>";
-        
+        echo "<script type='text/javascript'>alert('Session timeout\nPlease sign in again');</script>";
+        header('location: index.php');
     }
 ?>
 
@@ -15,9 +14,12 @@
 <TITLE>SaveMyHealth GignedIn</TITLE>
 
 <head>
-    <h1 class="mainTitle">
+    <div class="mainTitle">
         SaveMyHealth
-    </h1>
+    </div>
+    <?php
+        echo "<div class='mainTitle' style='font-size:30px'>User " . $_SESSION['email'] . "</div>";
+    ?>
 </head>
 
 <body>

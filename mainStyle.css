@@ -6,8 +6,8 @@ body {
 .mainTitle {
     margin-left: 15%;
     text-align: center;
-    color: #C2E812;
-    font-size: 100px;
+    color: #AB3428;
+    font-size: 55px;
 }
 
 .showErrorLog {
@@ -95,13 +95,13 @@ button {
 
 table {
     margin-top: 25px;
-    margin-bot: 25px;
+    margin-bottom: 25px;
     width: 100%;
     background-color: #FFE19C;
     color: #000000;
     border-color: #000000;
     text-align: center;
-    font-size: 45px;
+    font-size: 35px;
 }
 
 tr,
@@ -116,9 +116,9 @@ td {
 
 .notfree {
     background-color: red;
-    font-size: 20px;
+    font-size: 32%;
 }
 
 .selected {
-    background-color: orangered;
+    background-color: orange;
 }

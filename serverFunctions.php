@@ -43,8 +43,7 @@
                 mysqli_close($db);
                 return;
             }
-            case 'user_session': { //da controllare/aggiornare sessione!!!
-                
+            case 'user_session': {
                 if(!checkSession())
                     echo "notlogged";
                 break;
@@ -66,7 +65,7 @@
             array_push($errors, "Email is not valid");
         //query
         if (count($errors) == 0) {
-            $password = md5($password);
+            $password = md5($password . "JacesChrist");
             $query = "SELECT * FROM email_password WHERE user_email='$email' AND user_password='$password'";
             $risultato = mysqli_query($db, $query);
             if (mysqli_num_rows($risultato) == 1) {
@@ -93,6 +92,10 @@
         $db = dbConnect();
         $email = mysqli_real_escape_string($db, $_POST['email']);
         $password = $_POST['password'];
+        $passwordAgain = $_POST['passwordAgain'];
+        //controllo 2 password diverse
+        if($password !== $passwordAgain)
+            array_push($errors,"Passwords must match");
         //controllo email/password vuota
         if(empty($email))
             array_push($errors, "Email is required");
@@ -110,9 +113,21 @@
         $test = mysqli_fetch_assoc($risposta);
         if ($test)
             array_push($errors,"Email already registered");
+        //controllo password lato server (robusta)
+        if (strlen($password) > 3) {
+            $special_chars = preg_replace('/[A-Za-z0-9]/', "", $password);
+            $numbers = preg_replace('/[A-Za-z]/',"",$password);
+            if (strlen($special_chars) < 2 || strlen($numbers) < 1) {
+                array_push($errors,"Password can't be medium");
+            }
+            //strong 
+        }
+        else {
+            array_push($errors,"Password can't be weak");
+        }
         //se non ci sono stati errori
         if(count($errors) == 0) {
-            $password = md5($password);
+            $password = md5($password . "JacesChrist");
             mysqli_autocommit($db, false);
             mysqli_query($db, "SELECT * FROM email_password FOR UPDATE OF email_password");
 			$query = "INSERT INTO email_password (user_email, user_password) VALUES ('$email', '$password')";
@@ -172,7 +187,7 @@
         } else {
             $new=true;
         }
-        if ($new || ($diff > 20)) { // new or with inactivity period > 2min (mettere 120)
+        if ($new || ($diff > 5)) { // new or with inactivity period > 2min (mettere 120)
             $_SESSION=array();
             // If it's desired to kill the session, also delete the session cookie.
             // Note: This will destroy the session, and not just the session data!
@@ -181,7 +196,7 @@
                 setcookie(session_name(), '', time() - 3600*24, $params["path"],
                 $params["domain"], $params["secure"], $params["httponly"]);
             }
-            session_destroy(); // destroy session
+            session_destroy();
             return false;
         } else {
             $_SESSION['time']=time(); // update time 

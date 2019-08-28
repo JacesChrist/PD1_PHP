@@ -2,7 +2,6 @@
     <?php 
         if(isset($_SESSION['email'])) { //mostra se loggato
             echo "<form method='GET' action='mainPage.php'> <button class='sidebarButton' type='submit'> Home </button> </form>";
-            echo "<div class='userSidebar'>User<br>" . $_SESSION['email'] . "<br>logged in</div>";
             echo "<form action='serverFunctions.php' method='POST'> <button type='submit' class='sidebarButton' name='SignOut'>SignOut</button> </form>";
         }
         else { //mostra se non loggato

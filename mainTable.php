@@ -1,4 +1,7 @@
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"> </script>
+<noscript> Javascript is not enabled. Please, enable it! </noscript>
+<LINK href="mainStyle.css" rel=stylesheet type="text/css">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
 <div class="main">
     <table id='table' border="1" cellspacing="0" cellpadding="0" text-align:center style='margin-top:25px;'>
@@ -39,7 +42,7 @@
     $('#table tr').each(function () {
         $(this).find('td').each(function () {
             var slot = this.id;
-            if (slot != "day" && slot != "hour" && slot != "debug") {
+            if (slot != "day" && slot != "hour" && slot != "debug" && $(this).hasClass("notfree")) {
                 var casella = $(this);
                 casella.on('mouseenter', function () {
                     $.ajax({
@@ -51,16 +54,7 @@
                         type: "POST",
                         dataType: "text"
                     }).done(function (response) {
-                        //if(response != "FREE") //NON FUNGE QUESTO CONTROLLO
                         casella.html(response);
-                        /*if(response != "FREE"){ //TODO: non cambia classe se qualcuno prenota mentre guardo
-                            casella.removeClass('notfree');
-                            casella.addClass('free');
-                        }
-                        else {
-                            casella.removeClass('free');
-                            casella.addClass('notfree');
-                        }*/
                     });
                 }).on('mouseleave', function () {
                     casella.html("");
@@ -91,6 +85,10 @@
                                 casella.addClass('free');
                             }
                         }
+                    }
+                    else {
+                            alert("Sign in required");
+                            document.location.href = 'SignInPage.php';
                     }
                 });
             })
