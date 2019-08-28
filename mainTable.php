@@ -35,7 +35,6 @@
 </div>
 
 <script type="text/javascript">
-
     //cancella togliendo mouse
     $('#table tr').each(function () {
         $(this).find('td').each(function () {
@@ -54,7 +53,7 @@
         $(this).find('td').each(function () {
             var casella = $(this);
             var slot = this.id;
-            $(this).mouseover(function () {
+            casella.mouseover(function () {
                 if (slot != "day" && slot != "hour" && slot != "debug") {
                     $.ajax({
                         url: "serverFunctions.php",
@@ -64,9 +63,9 @@
                         },
                         type: "POST",
                         dataType: "text"
-                    }).done(function (response) { 
+                    }).done(function (response) {
                         //if(response != "FREE") //NON FUNGE QUESTO CONTROLLO
-                            casella.html(response);
+                        casella.html(response);
                         /*if(response != "FREE"){ //TODO: non cambia classe se qualcuno prenota mentre guardo
                             casella.removeClass('notfree');
                             casella.addClass('free');
@@ -81,5 +80,32 @@
         })
     });
 
-    
+    //seleziona cliccando
+    $('#table tr').each(function () {
+        $(this).find('td').each(function () {
+            var casella = $(this);
+            casella.click(function () {
+                $.ajax({
+                    url: "serverFunctions.php",
+                    data: {
+                        postfunctions: "user_session"
+                    },
+                    type: "POST"
+                }).done(function (data) {
+                    if (data == "loggedin") { //se sono loggato
+                        if (casella.hasClass('free')) {
+                            casella.removeClass('free');
+                            casella.addClass('selected');
+                        } else {
+                            if (casella.hasClass('selected')) {
+                                casella.removeClass('selected');
+                                casella.addClass('free');
+                            }
+                        }
+                    }
+                });
+            })
+
+        });
+    });
 </script>

@@ -112,10 +112,13 @@ td {
 
 .free {
     background-color: green;
-    font-size: 25px;
 }
 
 .notfree {
     background-color: red;
-    font-size: 25px;
+    font-size: 20px;
+}
+
+.selected {
+    background-color: orange;
 }

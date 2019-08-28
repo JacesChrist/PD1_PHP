@@ -42,6 +42,14 @@
                 mysqli_close($db);
                 return;
             }
+            case 'user_session': { //da controllare/aggiornare sessione!!!
+                //checkSession();
+                if(isset($_SESSION['time']))
+                    echo "loggedin";
+                else 
+                    echo "notlogged";
+                break;
+            }
         }
     }
 
@@ -165,7 +173,7 @@
         } else {
             $new=true;
         }
-        if ($new || ($diff > 120)) { // new or with inactivity period > 2min
+        if ($new || ($diff > 20)) { // new or with inactivity period > 2min (mettere 120)
             $_SESSION=array();
             // If it's desired to kill the session, also delete the session cookie.
             // Note: This will destroy the session, and not just the session data!
