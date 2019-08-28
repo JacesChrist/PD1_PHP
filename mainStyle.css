@@ -1,0 +1,121 @@
+body {
+    background-color: #63B0CD;
+    text-align: center;
+}
+
+.mainTitle {
+    margin-left: 15%;
+    text-align: center;
+    color: #BA1200;
+    font-size: 100px;
+}
+
+.showErrorLog {
+    text-align: center;
+    color: red;
+}
+
+button {
+    -webkit-transition-duration: 1s;
+    transition-duration: 1s;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    height: 50px;
+    width: 100px;
+    font-size: 20px;
+}
+
+.button:hover {
+    background-color: #FF9F1C;
+}
+
+.weak {
+    color: red;
+}
+
+.medium {
+    color: orange;
+}
+
+.strong {
+    color: green;
+}
+
+.main {
+    margin-left: 15%;
+    font-size: 40px;
+    padding: 0px 10px;
+}
+
+.input {
+    height: 30px;
+    width: 300px;
+    padding-top: 5px;
+    font-size: 20px;
+}
+
+/*SIDEBAR*/
+
+.sidenav {
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #3B0086;
+    overflow-x: hidden;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.userSidebar {
+    color: white;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 25px;
+}
+
+.sidebarButton {
+    -webkit-transition-duration: 2s;
+    transition-duration: 2s;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    height: 70px;
+    width: 70%;
+    font-size: 25px;
+}
+
+.sidebarButton:hover {
+    background-color: #FF9F1C;
+}
+
+
+/*TABELLA*/
+
+table {
+    margin-top: 25px;
+    margin-bot: 25px;
+    width: 100%;
+    background-color: #FFE19C;
+    color: #000000;
+    border-color: #000000;
+    text-align: center;
+    font-size: 50px;
+}
+
+tr,
+td {
+    height: 50px;
+    width: 150px;
+}
+
+.free {
+    background-color: green;
+    font-size: 25px;
+}
+
+.notfree {
+    background-color: red;
+    font-size: 25px;
+}
