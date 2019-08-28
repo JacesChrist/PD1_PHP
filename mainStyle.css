@@ -6,7 +6,7 @@ body {
 .mainTitle {
     margin-left: 15%;
     text-align: center;
-    color: #BA1200;
+    color: #C2E812;
     font-size: 100px;
 }
 
@@ -63,7 +63,7 @@ button {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #3B0086;
+    background-color: #020887;
     overflow-x: hidden;
     padding-top: 20px;
     text-align: center;
@@ -101,7 +101,7 @@ table {
     color: #000000;
     border-color: #000000;
     text-align: center;
-    font-size: 50px;
+    font-size: 45px;
 }
 
 tr,
@@ -120,5 +120,5 @@ td {
 }
 
 .selected {
-    background-color: orange;
+    background-color: orangered;
 }

@@ -19,6 +19,7 @@
     if(isset($_POST['postfunctions'])) {
         switch($_POST['postfunctions']){
             case 'checkBook': {
+                //checkSession();
                 $db = dbConnect();
                 $slot = $_POST['slot'];
                 //controllo che sia prenotato per evitare errori
@@ -43,10 +44,8 @@
                 return;
             }
             case 'user_session': { //da controllare/aggiornare sessione!!!
-                //checkSession();
-                if(isset($_SESSION['time']))
-                    echo "loggedin";
-                else 
+                
+                if(!checkSession())
                     echo "notlogged";
                 break;
             }
@@ -183,15 +182,10 @@
                 $params["domain"], $params["secure"], $params["httponly"]);
             }
             session_destroy(); // destroy session
-            // redirect client to login page
-            //header('HTTP/1.1 307 temporary redirect');
-            array_push($errors,"Timeout, please sign in again");
-            array_push($errors,"Signed out for timeout");
-            header('Location: index.php');
-            exit; // IMPORTANT to avoid further output from the script
+            return false;
         } else {
-            $_SESSION['time']=time(); /* update time */
-            //echo '<html><body>Tempo ultimo accesso aggiornato: ' .$_SESSION['time'].'</body></html>';
+            $_SESSION['time']=time(); // update time 
+            return true;
         }       
     }
 

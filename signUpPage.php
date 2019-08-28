@@ -67,7 +67,7 @@
         var password = $("#password").val();
         if (password.length < 3) {
             //weak
-            $("#strength").html("weak");
+            $("#strength").html("WEAK password");
             $("#strength").removeClass('strong');
             $("#strength").removeClass('medium');
             $("#strength").addClass('weak');
@@ -76,13 +76,13 @@
             var numbers = password.replace(/[^0-9]/g, '');
             if (special_chars.length >= 2 && numbers.length >= 1) {
                 //strong
-                $("#strength").html("strong");
+                $("#strength").html("STRONG password");
                 $("#strength").removeClass('weak');
                 $("#strength").removeClass('medium');
                 $("#strength").addClass('strong');
             } else {
                 //medium
-                $("#strength").html("medium");
+                $("#strength").html("MEDIUM password");
                 $("#strength").removeClass('weak');
                 $("#strength").removeClass('strong');
                 $("#strength").addClass('medium');

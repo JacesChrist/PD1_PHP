@@ -35,26 +35,13 @@
 </div>
 
 <script type="text/javascript">
-    //cancella togliendo mouse
+   //mostra email_user e timestamp passando mouse, toglie togliendo mouse
     $('#table tr').each(function () {
         $(this).find('td').each(function () {
-            var casella = $(this);
             var slot = this.id;
-            $(this).mouseleave(function () {
-                if (slot != "day" && slot != "hour") {
-                    $(this).delay(100000).html("");
-                }
-            });
-        })
-    });
-
-    //mostra email_user e timestamp passando mouse
-    $('#table tr').each(function () {
-        $(this).find('td').each(function () {
-            var casella = $(this);
-            var slot = this.id;
-            casella.mouseover(function () {
-                if (slot != "day" && slot != "hour" && slot != "debug") {
+            if (slot != "day" && slot != "hour" && slot != "debug") {
+                var casella = $(this);
+                casella.on('mouseenter', function () {
                     $.ajax({
                         url: "serverFunctions.php",
                         data: {
@@ -75,9 +62,11 @@
                             casella.addClass('notfree');
                         }*/
                     });
-                }
-            });
-        })
+                }).on('mouseleave', function () {
+                    casella.html("");
+                })
+            }
+        });
     });
 
     //seleziona cliccando
@@ -92,7 +81,7 @@
                     },
                     type: "POST"
                 }).done(function (data) {
-                    if (data == "loggedin") { //se sono loggato
+                    if (data != "notlogged") { //se sono loggato
                         if (casella.hasClass('free')) {
                             casella.removeClass('free');
                             casella.addClass('selected');

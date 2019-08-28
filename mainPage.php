@@ -2,7 +2,11 @@
     include('serverFunctions.php');
     checkCookie();
     checkHttps();
-    checkSession();
+    if(!checkSession()) {
+        header('Location: index.php');
+        echo "<script type='text/javascript'>alert('Session timeout<br>Please sign in again');</script>";
+        
+    }
 ?>
 
 <noscript> Javascript is not enabled. Please, enable it! </noscript>
