@@ -11,12 +11,12 @@
 <noscript> Javascript is not enabled. Please, enable it! </noscript>
 <LINK href="mainStyle.css" rel=stylesheet type="text/css">
 
-<TITLE>SaveMyHealth GignedIn</TITLE>
+<TITLE>SaveMyHealth Home</TITLE>
 
 <head>
-    <div class="mainTitle">
+    <h1 class="mainTitle">
         SaveMyHealth
-    </div>
+</h1>
     <?php
         echo "<div class='mainTitle' style='font-size:30px'>User " . $_SESSION['email'] . "</div>";
     ?>

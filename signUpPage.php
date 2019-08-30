@@ -9,11 +9,11 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-<TITLE>SaveMyHealth SignUp</TITLE>
+<TITLE>SaveMyHealth Register</TITLE>
 
 <head>
     <h1 class="mainTitle">
-        SaveMyHealth - SignUp
+        SaveMyHealth - Register
     </h1>
 </head>
 
@@ -24,7 +24,7 @@
         <form name="SignIn" method="post" onsubmit="return checkPassword()">
             <div>
                 <label>Email: </label>
-                <input type="email" class="input" name="email" placeholder="Insert email" required />
+                <input type="email" class="input" name="email" placeholder="Insert new user email" required />
             </div>
             <div>
                 <label>New password: </label>
@@ -35,7 +35,7 @@
             </div>
             <div>
                 <label>New password again: </label>
-                <input id="passwordAgain" class="input" type="password" name="passwordAgain" placeholder="Repete password" required />
+                <input id="passwordAgain" class="input" type="password" name="passwordAgain" placeholder="Repete new password" required />
             </div>
             <div>
                 <button type="submit" class='button' name="trySignUp">Submit</button>

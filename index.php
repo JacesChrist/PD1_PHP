@@ -1,7 +1,7 @@
 <?php
     include('serverFunctions.php');
     checkCookie();
-	checkHttps();
+    checkHttps();
 ?>
 
 <noscript> Javascript is not enabled. Please, enable it! </noscript>
@@ -13,12 +13,13 @@
 <TITLE>SaveMyHealth</TITLE>
 
 <head>
-    <div class="mainTitle">
+    <h1 class="mainTitle">
         SaveMyHealth
-    </div>
+    </h1>
 </head>
 
 <body>
+
     <?php include('sidebar.php'); ?>
     <?php include('mainTable.php'); ?>
     

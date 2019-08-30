@@ -1,13 +1,21 @@
+:root {
+    --background-color: #8D918B;
+    --title-color: #AAD922;
+    --sidebar-color: #3891A6;
+    --button-transition-color: #FDE74C;
+    --table-color: #FFFFFF;
+}
+
 body {
-    background-color: #63B0CD;
+    background-color: var(--background-color);
     text-align: center;
 }
 
 .mainTitle {
     margin-left: 15%;
     text-align: center;
-    color: #AB3428;
-    font-size: 55px;
+    color: var(--title-color);
+    font-size: 70px;
 }
 
 .showErrorLog {
@@ -26,7 +34,7 @@ button {
 }
 
 .button:hover {
-    background-color: #FF9F1C;
+    background-color: var(--button-transition-color);
 }
 
 .weak {
@@ -63,7 +71,7 @@ button {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #020887;
+    background-color: var(--sidebar-color);
     overflow-x: hidden;
     padding-top: 20px;
     text-align: center;
@@ -77,8 +85,8 @@ button {
 }
 
 .sidebarButton {
-    -webkit-transition-duration: 2s;
-    transition-duration: 2s;
+    -webkit-transition-duration: 1s;
+    transition-duration: 1s;
     margin-top: 25px;
     margin-bottom: 25px;
     height: 70px;
@@ -87,7 +95,7 @@ button {
 }
 
 .sidebarButton:hover {
-    background-color: #FF9F1C;
+    background-color: var(--button-transition-color);
 }
 
 
@@ -97,7 +105,7 @@ table {
     margin-top: 25px;
     margin-bottom: 25px;
     width: 100%;
-    background-color: #FFE19C;
+    background-color: var(--table-color);
     color: #000000;
     border-color: #000000;
     text-align: center;
@@ -116,9 +124,13 @@ td {
 
 .notfree {
     background-color: red;
-    font-size: 32%;
+    font-size: 20px;
 }
 
 .selected {
-    background-color: orange;
+    background-color: yellow;
+}
+.booked {
+    background-color: orangered;
+    font-size: 20px;
 }

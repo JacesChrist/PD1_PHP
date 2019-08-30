@@ -8,9 +8,9 @@
         $db = dbConnect();
         $query = "SELECT * FROM booking WHERE slot='$slot'";
         $risultato = mysqli_query($db, $query);
-        $aaa = mysqli_num_rows($risultato);
+        $risultato = mysqli_num_rows($risultato);
         mysqli_close($db);
-        if($aaa == 0)
+        if($risultato == 0)
             return false;
         else 
             return true;
@@ -25,19 +25,19 @@
                 //controllo che sia prenotato per evitare errori
                 $query = "SELECT * FROM booking WHERE slot='$slot'";
                 $risultato = mysqli_query($db, $query);
-                $aaa = mysqli_num_rows($risultato);
-                if($aaa != 0) {
+                $appoggio = mysqli_num_rows($risultato);
+                if($appoggio != 0) {
                     $query = "SELECT * FROM booking WHERE slot='$slot'";
                     $query = mysqli_query($db, $query);
                     $query = mysqli_fetch_array($query);
                     echo $query['user_email'];
                     $query = "SELECT * FROM booking WHERE slot='$slot'";
                     $risultato = mysqli_query($db, $query);
-                    $aaa = mysqli_num_rows($risultato);
+                    $appoggio = mysqli_num_rows($risultato);
                     $query = "SELECT * FROM booking WHERE slot='$slot'";
                     $query = mysqli_query($db, $query);
                     $query = mysqli_fetch_array($query);
-                    echo "<br>" . $query['time'];
+                    echo "<br>" . $query['timevalue'];
                 }
                 //echo "FREE";
                 mysqli_close($db);
@@ -46,6 +46,50 @@
             case 'user_session': {
                 if(!checkSession())
                     echo "notlogged";
+                break;
+            }
+            case 'trySubmit': {
+                $db = dbConnect();
+                $selected = $_POST['selected'];
+                mysqli_autocommit($db,false);
+                mysqli_query($db, "SELECT * FROM booking FOR UPDATE OF booking");
+                $query = "SELECT * FROM booking WHERE slot = ";
+                for($i = 0;$i < (count($selected) - 1); $i++) {
+                    $query = $query . "'" . $selected[$i] . "'" . " || slot = ";
+                }
+                $query = $query . $selected[count($selected) - 1];
+                $risposta = mysqli_query($db,$query);
+                mysqli_commit($db);
+                if (mysqli_num_rows($risposta) == 0) { //slot disponibili
+                    mysqli_autocommit($db, false);
+                    mysqli_query($db, "SELECT * FROM booking FOR UPDATE OF booking");
+                    for($i = 0;$i < count($selected); $i++) {
+                        $query = "INSERT INTO booking (user_email, slot, timevalue) VALUES ('" . $_SESSION['email'] . "','";
+                        $query = $query . $selected[$i] . "','" . date('d/m/Y h:i:s') . " - " . round(microtime(true) * 1000) . "')";
+                        if(!mysqli_query($db, $query)){
+                            array_push($errors,"Error Processing Request");
+                            mysqli_rollback($db);
+                            mysqli_autocommit($db, true);
+                            echo "DBerror1";
+                        }
+                        if(!mysqli_commit($db)){
+                            array_push($errors,"Error Processing Request");
+                            mysqli_rollback($db);
+                            mysqli_autocommit($db, true);
+                            echo "DBerror2";
+                        }
+                    }
+                    mysqli_autocommit($db, true);
+                    echo "submitSuccess";
+                }
+                else { //slot non disponibili
+                    echo "slotNotFree";
+                }
+                
+                
+                
+                
+                mysqli_close($db);
                 break;
             }
         }
@@ -152,12 +196,23 @@
     }
 
     if(isset($_POST['SignOut'])) {
-        session_destroy();
+        $_SESSION=array();
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 3600*24, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+            setcookie(session_name(), '', time() - 3600*24, $params["path"],$params["domain"], $params["secure"], $params["httponly"]);
         }
-        header('location: index.php');
+        session_destroy();
+        header('location: mainPage.php');
+        return false;
+    }
+
+    if(isset($_POST['Submit'])) {
+        if(!checkSession()) { //non esce l'alert
+            header('location: SignInPage.php');
+        }
+        else {
+            echo "fa cose";
+        }
         return;
     }
 
@@ -187,10 +242,8 @@
         } else {
             $new=true;
         }
-        if ($new || ($diff > 5)) { // new or with inactivity period > 2min (mettere 120)
+        if ($new || ($diff > 125)) { // new or with inactivity period > 2min (mettere 120)
             $_SESSION=array();
-            // If it's desired to kill the session, also delete the session cookie.
-            // Note: This will destroy the session, and not just the session data!
             if (ini_get("session.use_cookies")) { // PHP using cookies to handle session
                 $params = session_get_cookie_params();
                 setcookie(session_name(), '', time() - 3600*24, $params["path"],
@@ -211,5 +264,4 @@
             exit();
         }
     }
-
 ?>
