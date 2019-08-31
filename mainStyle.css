@@ -1,8 +1,8 @@
 :root { /*define colori primari*/
     --background-color: #8D918B;
     --title-color: rgb(0, 30, 197);
-    --sidebar-color: #3891A6;
-    --button-transition-color: #FDE74C;
+    --sidebar-color: rgb(37, 132, 153);
+    --button-transition-color: rgb(255, 225, 0);
     --table-color: #FFFFFF;
     --log-color: rgb(110, 0, 173);
 }
@@ -86,13 +86,6 @@ button {
     overflow-x: hidden;
     padding-top: 20px;
     text-align: center;
-}
-
-.userSidebar {
-    color: white;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    font-size: 25px;
 }
 
 .sidebarButton {

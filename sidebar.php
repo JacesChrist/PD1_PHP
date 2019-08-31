@@ -5,9 +5,9 @@
 
 <div class="sidenav">
     <?php 
-        switch (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)) {
-            case ('/s265542/distributedProgramming1/mainPage.php'):
-            { //mainPage
+        switch (explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1]) { //prende pagina corrente
+            case ('mainPage.php'): //mainPage
+            { 
                 //SignOut
                 echo "<form action='serverFunctions.php' method='POST'> <button type='submit' class='sidebarButton' name='SignOut'>SignOut</button> </form>";
                 //Submit
@@ -16,29 +16,28 @@
                 echo "<button id='unbook' class='sidebarButton' name='unbook'>Unbook</button>";
                 break;
             }
-            case ('/s265542/distributedProgramming1/index.php'): 
-            case ('/s265542/distributedProgramming1/'): 
-            { //index
-                //SignIn
-                echo "<form method='GET' action='SignInPage.php'> <button type='submit' class='sidebarButton'> Login </button> </form>";
-                //SignUp
-                echo "<form method='GET' action='SignUpPage.php'> <button type='submit' class='sidebarButton'> Register </button> </form>";
-                break;
-            }
-            case ('/s265542/distributedProgramming1/SignInPage.php'):
-            { //SignIn
+            case ('SignInPage.php'): //SignIn
+            { 
                 //Home
                 echo "<form method='GET' action='mainPage.php'> <button class='sidebarButton' type='submit'> Home </button> </form>";
                 //SignUp
                 echo "<form method='GET' action='SignUpPage.php'> <button type='submit' class='sidebarButton'> Register </button> </form>";
                 break;
             }
-            case ('/s265542/distributedProgramming1/SignUpPage.php'): 
-            { //SignUp
+            case ('SignUpPage.php'): //SignUp
+            { 
                 //Home
                 echo "<form method='GET' action='mainPage.php'> <button class='sidebarButton' type='submit'> Home </button> </form>";
                 //SignIn
                 echo "<form method='GET' action='SignInPage.php'> <button type='submit' class='sidebarButton'> Login </button> </form>";
+                break;
+            }
+            default: //index
+            { 
+                //SignIn
+                echo "<form method='GET' action='SignInPage.php'> <button type='submit' class='sidebarButton'> Login </button> </form>";
+                //SignUp
+                echo "<form method='GET' action='SignUpPage.php'> <button type='submit' class='sidebarButton'> Register </button> </form>";
                 break;
             }
         }   
@@ -97,7 +96,9 @@
     $('#unbook').click(function () {
         $.ajax({
             url: "serverFunctions.php",
-            data: { postfunctions: "unbook" },
+            data: {
+                postfunctions: "unbook"
+            },
             type: "POST",
         }).done(function (data) {
             switch (data) {
@@ -122,4 +123,4 @@
             }
         });
     });
-</script> 
+</script>
