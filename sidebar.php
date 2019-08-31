@@ -1,14 +1,11 @@
-<noscript> Javascript is not enabled. Please, enable it! </noscript>
 <LINK href="mainStyle.css" rel=stylesheet type="text/css">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script type="text/javascript" src="scripts.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+<script src="jquery-3.3.1.min.js"></script>
 
 <div class="sidenav">
     <?php 
-        switch ($_SERVER['REQUEST_URI']) { //cambiare path cartelle in caso di cambio nomi!
-            //'/^[\s\S])' regex per tutto dopo uri?
-            case ('/s265542/distributedProgramming1/mainPage.php?'): 
+        switch (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)) {
             case ('/s265542/distributedProgramming1/mainPage.php'):
             { //mainPage
                 //SignOut
@@ -20,7 +17,7 @@
                 break;
             }
             case ('/s265542/distributedProgramming1/index.php'): 
-            case ('/s265542/distributedProgramming1/index.php?'):
+            case ('/s265542/distributedProgramming1/'): 
             { //index
                 //SignIn
                 echo "<form method='GET' action='SignInPage.php'> <button type='submit' class='sidebarButton'> Login </button> </form>";
@@ -28,7 +25,6 @@
                 echo "<form method='GET' action='SignUpPage.php'> <button type='submit' class='sidebarButton'> Register </button> </form>";
                 break;
             }
-            case ('/s265542/distributedProgramming1/SignInPage.php?'):
             case ('/s265542/distributedProgramming1/SignInPage.php'):
             { //SignIn
                 //Home
@@ -37,7 +33,6 @@
                 echo "<form method='GET' action='SignUpPage.php'> <button type='submit' class='sidebarButton'> Register </button> </form>";
                 break;
             }
-            case ('/s265542/distributedProgramming1/SignUpPage.php?'):
             case ('/s265542/distributedProgramming1/SignUpPage.php'): 
             { //SignUp
                 //Home
@@ -50,41 +45,81 @@
     ?>
 </div>
 
-<script type="text/javascript">    
+<script type="text/javascript">
+    //submit     
     $('#submitbutton').click(function () {
-        $.ajax({
-            url: "serverFunctions.php",
-            data: {
-                postfunctions: "user_session"
-            },
-            type: "POST"
-        }).done(function (response) {
-            if (response != "notlogged") { //se sono loggato
-                var selected = getSelected();
-                if(selected != "") {
-                    $.ajax({
-                        url: "serverFunctions.php",
-                        data: {
-                            postfunctions: 'trySubmit',
-                            selected: selected
-                        },
-                        type: "POST",
-                        dataType: "text"
-                    }).done(function (data) {
-                        if(data == "submitSuccess") {
-                            $('.selected').attr('class', 'booked');
-                        }
-                        else {
-                            alert("Slot already taken");
-                            document.location.href = 'mainPage.php';
-                        }
-                    });
+        var elements = document.getElementsByClassName('selected');
+        var selectedSlots = [];
+        for (var i = 0; i < elements.length; i++) {
+            selectedSlots.push(elements[i].id);
+        }
+        if (selectedSlots != "") {
+            $.ajax({
+                url: "serverFunctions.php",
+                data: {
+                    postfunctions: 'trySubmit',
+                    selected: selectedSlots
+                },
+                type: "POST",
+                dataType: "text"
+            }).done(function (data) {
+                switch (data) {
+                    case ("notlogged"): {
+                        alert("Sign in please");
+                        document.location.href = 'SignInPage.php';
+                        break;
+                    }
+                    case ("anySlotNotFree"): {
+                        alert("Any slot is already booked");
+                        document.location.href = 'mainPage.php';
+                        break;
+                    }
+                    case ("submitSuccess"): {
+                        $("#log").html("Booked successfully");
+                        $('.selected').attr('class', 'booked');
+                        break;
+                    }
+                    default: {
+                        alert("Error occurred\nPlease try again");
+                        document.location.href = 'mainPage.php';
+                        break;
+                    }
                 }
-            } else {
-                alert("Sign in please");
-                document.location.href = 'SignInPage.php';
-            }
-        })
+            });
+        } else {
+            $("#log").html("Select some slot");
+        }
     });
 </script>
 
+<script type="text/javascript">
+    //unbook
+    $('#unbook').click(function () {
+        $.ajax({
+            url: "serverFunctions.php",
+            data: { postfunctions: "unbook" },
+            type: "POST",
+        }).done(function (data) {
+            switch (data) {
+                case ("notlogged"): {
+                    alert("Sign in please");
+                    document.location.href = 'SignInPage.php';
+                    break;
+                }
+                case ("nothingBookedYet"): {
+                    $("#log").html("Nothing booked yed");
+                    break;
+                }
+                case ("unbooked"): {
+                    document.location.href = 'mainPage.php'; //cambiare mostrare cambiamento
+                    break;
+                }
+                default: {
+                    alert("Error occurred\nPlease try again");
+                    document.location.href = 'mainPage.php';
+                    break;
+                }
+            }
+        });
+    });
+</script> 

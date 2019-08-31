@@ -1,9 +1,10 @@
-:root {
+:root { /*define colori primari*/
     --background-color: #8D918B;
-    --title-color: #AAD922;
+    --title-color: rgb(0, 30, 197);
     --sidebar-color: #3891A6;
     --button-transition-color: #FDE74C;
     --table-color: #FFFFFF;
+    --log-color: rgb(110, 0, 173);
 }
 
 body {
@@ -18,9 +19,19 @@ body {
     font-size: 70px;
 }
 
-.showErrorLog {
+.subTitle {
+    margin-left: 15%;
     text-align: center;
-    color: red;
+    color: var(--title-color);
+    font-size: 45px;
+}
+
+#log {
+    text-align: center;
+    color: var(--log-color);
+    margin-left: 15%;
+    font-size: 40px;
+    padding: 0px 10px;
 }
 
 button {
@@ -110,12 +121,14 @@ table {
     border-color: #000000;
     text-align: center;
     font-size: 35px;
+    border: 2px solid black;;
 }
 
 tr,
 td {
     height: 50px;
     width: 150px;
+    border: 1px solid black;
 }
 
 .free {
