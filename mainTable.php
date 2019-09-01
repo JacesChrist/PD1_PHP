@@ -88,8 +88,13 @@
                             }
                         }
                     } else {
-                        alert("Sign in please");
-                        document.location.href = 'SignInPage.php';
+                        if(<?php echo "'" . explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1] . "'"; ?> == "index.php") {
+                            $("#log").html("Sign in please");
+                        }
+                        else {
+                            alert("Sign in please");
+                            document.location.href = 'SignInPage.php';
+                        }
                     }
                 });
             })

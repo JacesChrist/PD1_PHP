@@ -1,10 +1,10 @@
 :root { /*define colori primari*/
-    --background-color: #8D918B;
-    --title-color: rgb(0, 30, 197);
-    --sidebar-color: rgb(37, 132, 153);
-    --button-transition-color: rgb(255, 225, 0);
-    --table-color: #FFFFFF;
-    --log-color: rgb(110, 0, 173);
+    --background-color: rgb(236, 197, 96);
+    --title-color: #000000;
+    --sidebar-color: rgb(14, 82, 95);
+    --button-transition-color: rgb(11, 146, 76);
+    --table-color: rgb(178, 196, 221);
+    --log-color: rgb(14, 82, 95);
 }
 
 body {
@@ -53,7 +53,7 @@ button {
 }
 
 .medium {
-    color: orange;
+    color: orangered;
 }
 
 .strong {

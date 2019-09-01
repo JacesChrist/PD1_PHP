@@ -3,15 +3,10 @@
     session_start();
 
     $errors = array();
-    $possibleSlot = array(  "00","01","02","03","04",
-                            "10","11","12","13","14",
-                            "20","21","22","23","24",
-                            "30","31","32","33","34",
-                            "40","41","42","43","44",
-                            "50","51","52","53","54",
-                            "60","61","62","63","64",
-                            "70","71","72","73","74",
-                            "80","81","83","83","84");
+    $possibleSlot = array(); //possibili valori di slot
+    for($i = 0; $i < 9; $i++)
+        for($j = 0; $j < 5; $j++)
+            array_push($possibleSlot,$i . $j);
 
     function checkTable($slot) {
         $db = dbConnect();
@@ -72,16 +67,20 @@
                     foreach($selected as $slot) { //controllo slot valido
                         if(!in_array($slot,$possibleSlot)) {
                             echo "errorSlot";
-                            return;
                         }
                     }
                     mysqli_autocommit($db,false);
                     mysqli_query($db, "SELECT * FROM booking FOR UPDATE OF booking");
-                    $query = "SELECT * FROM booking WHERE slot = ";
-                    for($i = 0;$i < (count($selected) - 1); $i++) {
-                        $query = $query . "'" . $selected[$i] . "'" . " || slot = ";
+                    $query = "SELECT * FROM booking WHERE slot=";
+                    if(count($selected) == 1) {
+                        $query = $query . "'" . $selected[0] . "'";
                     }
-                    $query = $query . $selected[count($selected) - 1];
+                    else {
+                        for($i = 0;$i < (count($selected) - 1); $i++) {
+                            $query = $query . "'" . $selected[$i] . "' || slot =";
+                        }
+                        $query = $query . "'" . $selected[count($selected) - 1] . "'";
+                    }
                     $risposta = mysqli_query($db,$query);
                     if(!$risposta){ //tenta query SELECT per check
                         array_push($errors,"Error Processing Request");
@@ -168,7 +167,7 @@
             array_push($errors, "Email is not valid");
         //query
         if (count($errors) == 0) {
-            $password = md5($password . "JacesChrist");
+            $password = md5($password);
             $query = "SELECT * FROM email_password WHERE user_email='$email' AND user_password='$password'";
             $risultato = mysqli_query($db, $query);
             if (mysqli_num_rows($risultato) == 1) {
@@ -230,7 +229,7 @@
         }
         //se non ci sono stati errori
         if(count($errors) == 0) {
-            $password = md5($password . "JacesChrist");
+            $password = md5($password);
             mysqli_autocommit($db, false);
             mysqli_query($db, "SELECT * FROM email_password FOR UPDATE OF email_password");
 			$query = "INSERT INTO email_password (user_email, user_password) VALUES ('$email', '$password')";
@@ -301,7 +300,7 @@
         } else {
             $new=true;
         }
-        if ($new || ($diff > 120)) { // new or with inactivity period > 2min (mettere 120)
+        if ($new || ($diff > 120)) { //timeout session 2min
             $_SESSION=array();
             if (ini_get("session.use_cookies")) { // PHP using cookies to handle session
                 $params = session_get_cookie_params();
