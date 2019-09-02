@@ -47,25 +47,25 @@
 
 <script type="text/javascript">
     //check 2 password match
- function checkPassword() {
-    var password = $("#password").val();
-    if (password != $("#passwordAgain").val()) {
-        $("#log").html("Passwords must match");
-        return false;
-    }
-    if (password.length <= 3) {
-        $("#log").html("Passwords cant't be weak");
-        return false;
-    } else {
-        var special_chars = password.replace(/[A-Za-z0-9]/g, '');
-        var numbers = password.replace(/[^0-9]/g, '');
-        if (special_chars.length < 2 && numbers.length < 1) {
-            $("#log").html("Passwords cant't be medium");
+    function checkPassword() {
+        var password = $("#password").val();
+        if (password != $("#passwordAgain").val()) {
+            $("#log").html("Passwords must match");
             return false;
         }
+        if (password.length <= 3) {
+            $("#log").html("Passwords cant't be weak");
+            return false;
+        } else {
+            var special_chars = password.replace(/[A-Za-z0-9]/g, '');
+            var numbers = password.replace(/[^0-9]/g, '');
+            if (special_chars.length < 2 && numbers.length < 1) {
+                $("#log").html("Passwords cant't be medium");
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-}
 //show strength
     $("#password").on('change keyup paste mouseup', function () {
         var password = $("#password").val();

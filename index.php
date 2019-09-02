@@ -2,6 +2,9 @@
     include('serverFunctions.php');
     checkCookie();
     checkHttps();
+    if(isset($_SESSION['email'])) { //if there is a current session go to main page
+        header("location: mainPage.php");
+    }
 ?>
 
 <noscript> Javascript is not enabled. Please, enable it! </noscript>
