@@ -1,6 +1,4 @@
 <LINK href="mainStyle.css" rel=stylesheet type="text/css">
-<!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
 <script src="jquery-3.3.1.min.js"></script>
 
 <div class="main">
@@ -53,13 +51,13 @@
                 postfunctions: 'checkBook',
                 slot: slot
             },
+            async: false,
             type: "POST",
             dataType: "text"
         }).done(function (response) {
             $('#' + slot).html(response);
         });
-    });
-    $('.notfree').mouseleave(function () {
+    }).mouseleave(function () {
         var slot = this.id;
         $('#' + slot).html("");
     });
@@ -92,8 +90,8 @@
                             $("#log").html("Sign in please");
                         }
                         else {
-                            alert("Sign in please");
-                            document.location.href = 'SignInPage.php';
+                            alert("Session timeout");
+                            document.location.href = 'SignInPage.php?';
                         }
                     }
                 });

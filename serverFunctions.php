@@ -70,7 +70,8 @@
                         }
                     }
                     mysqli_autocommit($db,false);
-                    mysqli_query($db, "SELECT * FROM booking FOR UPDATE OF booking");
+                    if(!mysqli_query($db, "SELECT * FROM booking FOR UPDATE"))
+                        echo "DBerror0";
                     $query = "SELECT * FROM booking WHERE slot=";
                     if(count($selected) == 1) {
                         $query = $query . "'" . $selected[0] . "'";
@@ -121,7 +122,8 @@
                 if(checkSession()) {
                     $db = dbConnect();
                     mysqli_autocommit($db,false);
-                    mysqli_query($db, "SELECT * FROM booking FOR UPDATE OF booking");
+                    if(!mysqli_query($db, "SELECT * FROM booking FOR UPDATE"))
+                        echo "BDerror0";
                     $query = "SELECT * FROM booking WHERE user_email='" . $_SESSION['email'] . "' ORDER BY timestampB DESC";
                     $risultato = mysqli_query($db, $query);
                     if (mysqli_num_rows($risultato) == 0) {
@@ -208,7 +210,8 @@
             array_push($errors, "Email is not valid");
         //controllo mail dublicata
         mysqli_autocommit($db,false);
-        mysqli_query($db, "SELECT * FROM email_password FOR UPDATE OF email_password");
+        if(!mysqli_query($db, "SELECT * FROM email_password FOR UPDATE"))
+            echo "DBerror0";
         $query = "SELECT * FROM email_password WHERE user_email = '$email'";
         $risposta = mysqli_query($db,$query);
         mysqli_commit($db);
@@ -231,7 +234,8 @@
         if(count($errors) == 0) {
             $password = md5($password);
             mysqli_autocommit($db, false);
-            mysqli_query($db, "SELECT * FROM email_password FOR UPDATE OF email_password");
+            if(!mysqli_query($db, "SELECT * FROM email_password FOR UPDATE"))
+                echo "DBerror0";
 			$query = "INSERT INTO email_password (user_email, user_password) VALUES ('$email', '$password')";
 			if(!mysqli_query($db, $query)){
                 array_push($errors,"Error Processing Request");
@@ -260,7 +264,7 @@
             setcookie(session_name(), '', time() - 3600*24, $params["path"],$params["domain"], $params["secure"], $params["httponly"]);
         }
         session_destroy();
-        header('location: mainPage.php');
+        header('location: index.php?Signed out');
         return false;
     }
 
