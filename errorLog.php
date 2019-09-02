@@ -14,6 +14,10 @@
                         array_push($errors,"Signed out");
                         break;
                     }
+                    case ('Submit%20successfully'): {
+                        array_push($errors,"Submit successfully");
+                        break;
+                    }
                 }                    
             }
         }

@@ -72,8 +72,7 @@
                         break;
                     }
                     case ("submitSuccess"): {
-                        $("#log").html("Booked successfully");
-                        $('.selected').attr('class', 'booked');
+                        document.location.href = 'mainPage.php?Submit successfully';
                         break;
                     }
                     default: {
