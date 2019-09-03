@@ -86,12 +86,13 @@
                             }
                         }
                     } else { //not logged
-                        if(<?php echo "'" . explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1] . "'"; ?> == "index.php") {
+                        if((<?php echo "'" . explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1] . "'"; ?> == "index.php") 
+                                || (<?php echo "'" . explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1] . "'"; ?> == '')) {
                             $("#log").html("Sign in please");
                         }
                         else { //timeout case
-                            alert("Session timeout");
-                            document.location.href = 'SignInPage.php?';
+                                alert("Session timeout");
+                                document.location.href = 'SignInPage.php?';
                         }
                     }
                 });
