@@ -4,7 +4,7 @@
 <div class="main">
     <table id='table' cellspacing="0" cellpadding="0" text-align:center style='margin-top:25px;'>
         <tbody>
-            <tr>
+            <tr> <!-- days -->
                 <td id="debug"></td>
                 <td id="day">Monday</td>
                 <td id="day">Tuesday</td>
@@ -13,11 +13,11 @@
                 <td id="day">Friday</td>
             </tr>
             <?php
-                for($row = 0;$row < 9; $row++) {
+                for($row = 0;$row < 9; $row++) { //slots
                     echo "<tr>";
                     for($column = -1;$column < 5; $column++) {
                         if($column == -1) {
-                            echo "<td id='hour'>" . ($row + 8) . ":00 - ". ($row + 9) . ":00</td>";
+                            echo "<td id='hour'>" . ($row + 8) . ":00 - ". ($row + 9) . ":00</td>"; //hours
                         }
                         else {
                             echo "<td id='" . $row . $column . "' ";
@@ -42,7 +42,7 @@
 </div>
 
 <script type="text/javascript">
-    //mostra email_user e timestamp passando sopra caselle notfree
+    //show email_user and timestamp mouseon notfree slots
     $('.notfree').mouseover(function () {
         var slot = this.id;
         $.ajax({
@@ -57,14 +57,14 @@
         }).done(function (response) {
             $('#' + slot).html(response);
         });
-    }).mouseleave(function () {
+    }).mouseleave(function () { //hide mouseleave
         var slot = this.id;
         $('#' + slot).html("");
     });
 </script>
 
 <script type="text/javascript">
-    //seleziona casella cliccando se loggato
+    //select slot if logged
     $('.free').each(function () {
         var casella = $(this);
         var slot = this.id;
@@ -77,19 +77,19 @@
                     },
                     type: "POST"
                 }).done(function (data) {
-                    if (data != "notlogged") { //se sono loggato
-                        if (casella.hasClass('free')) {
+                    if (data != "notlogged") { //if logged
+                        if (casella.hasClass('free')) { //select
                             casella.attr('class', 'selected');
                         } else {
-                            if (casella.hasClass('selected')) {
+                            if (casella.hasClass('selected')) { //unselect
                                 casella.attr('class', 'free');
                             }
                         }
-                    } else {
+                    } else { //not logged
                         if(<?php echo "'" . explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1] . "'"; ?> == "index.php") {
                             $("#log").html("Sign in please");
                         }
-                        else {
+                        else { //timeout case
                             alert("Session timeout");
                             document.location.href = 'SignInPage.php?';
                         }

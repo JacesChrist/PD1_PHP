@@ -3,12 +3,12 @@
     session_start();
 
     $errors = array();
-    $possibleSlot = array(); //possibili valori di slot
+    $possibleSlot = array(); //possible slot values
     for($i = 0; $i < 9; $i++)
         for($j = 0; $j < 5; $j++)
             array_push($possibleSlot,$i . $j);
 
-    function checkTable($slot) {
+    function checkTable($slot) { //return value build table
         $db = dbConnect();
         $query = "SELECT * FROM booking WHERE slot='$slot'";
         $query = mysqli_query($db, $query);
@@ -19,13 +19,13 @@
         }
         else {
             $query = mysqli_fetch_array($query);
-            return $query['user_email'];
+            return $query['user_email']; //current book value
         }
     }
 
     if(isset($_POST['postfunctions'])) {
-        switch($_POST['postfunctions']){
-            case ('checkBook'): {
+        switch($_POST['postfunctions']){ //switch on AJAX POST functions
+            case ('checkBook'): { //return book value to show in red slots
                 $db = dbConnect();
                 $slot = mysqli_real_escape_string($db, $_POST['slot']);
                 if(in_array($slot,$possibleSlot)) {
@@ -53,18 +53,18 @@
                     return;
                 }
             }
-            case ('user_session'): {
+            case ('user_session'): { //check session
                 if(!checkSession())
                     echo "notlogged";
                 else 
                     echo "logged";
                 break;
             }
-            case ('trySubmit'): {
+            case ('trySubmit'): { //submit
                 if(checkSession()) {
                     $db = dbConnect();
-                    $selected = $_POST['selected'];
-                    foreach($selected as $slot) { //controllo slot valido
+					$selected = $_POST['selected'];
+                    foreach($selected as $slot) { //check valid slot
                         if(!in_array($slot,$possibleSlot)) {
                             echo "errorSlot";
                         }
@@ -83,31 +83,31 @@
                         $query = $query . "'" . $selected[count($selected) - 1] . "'";
                     }
                     $risposta = mysqli_query($db,$query);
-                    if(!$risposta){ //tenta query SELECT per check
+                    if(!$risposta){ //try query SELECT to check
                         array_push($errors,"Error Processing Request");
                         mysqli_rollback($db);
                         echo "DBerror0";
                     }
-                    if (mysqli_num_rows($risposta) == 0) { //se non ci sono collisioni sugli slot
+                    if (mysqli_num_rows($risposta) == 0) { //no collision on selected slots
                         $query = "INSERT INTO booking (user_email, slot, timestampB) VALUES ";
+						$currenttime = date("Y-m-d H:i:s", time());
                         for($i = 0;$i < (count($selected) - 1); $i++) {
-                            $query = $query . "('" . $_SESSION['email'] . "','" . $selected[$i] . "','" .  date("Y-m-d H:i:s", time()) . "') , ";                     
+                            $query = $query . "('" . $_SESSION['email'] . "','" . $selected[$i] . "','" . $currenttime . "') , ";                     
                         }
-                        $query = $query . "('" . $_SESSION['email'] . "','" . $selected[count($selected) - 1] . "','" .  date("Y-m-d H:i:s", time()) . "')";
-                        //echo $query;
-                        if(!mysqli_query($db, $query)){ //tenta query INSERT
+                        $query = $query . "('" . $_SESSION['email'] . "','" . $selected[count($selected) - 1] . "','" .  $currenttime . "')";
+                        if(!mysqli_query($db, $query)){ //try query INSERT
                             array_push($errors,"Error Processing Request");
                             mysqli_rollback($db);
                             echo "DBerror1";
                         }
-                        if(!mysqli_commit($db)){ //tenta commit
+                        if(!mysqli_commit($db)){ //try commit
                             array_push($errors,"Error Processing Request");
                             mysqli_rollback($db);
                             echo "DBerror2";
                         }
                         echo "submitSuccess";
                     }
-                    else { //slot non disponibili
+                    else { //any slot is no longer free
                         echo "anySlotNotFree";
                     }
                     mysqli_autocommit($db, true);
@@ -118,7 +118,7 @@
                 }
                 break;
             }
-            case ('unbook'): {
+            case ('unbook'): { //unbook
                 if(checkSession()) {
                     $db = dbConnect();
                     mysqli_autocommit($db,false);
@@ -127,17 +127,17 @@
                     $query = "SELECT * FROM booking WHERE user_email='" . $_SESSION['email'] . "' ORDER BY timestampB DESC";
                     $risultato = mysqli_query($db, $query);
                     if (mysqli_num_rows($risultato) == 0) {
-                        echo "nothingBookedYet";
+                        echo "nothingBookedYet"; //no book yet to unbook
                     }
                     else {
-                        $lasttimestamp = mysqli_fetch_array($risultato);
+                        $lasttimestamp = mysqli_fetch_array($risultato); //get last timestamp
                         $query = "DELETE FROM booking WHERE timestampB='" . $lasttimestamp['timestampB'] . "' AND user_email='" .  $_SESSION['email'] . "'";
-                        if(!mysqli_query($db, $query)){
+                        if(!mysqli_query($db, $query)){ //try query DELETE
                             array_push($errors,"Error Processing Request");
                             mysqli_rollback($db);
                             echo "BDerror1";
                         }
-                        if(!mysqli_commit($db)){
+                        if(!mysqli_commit($db)){ //try commit
                             array_push($errors,"Error Processing Request");
                             mysqli_rollback($db);
                             echo "BDerror1";
@@ -155,38 +155,37 @@
         }
     }
 
-    if(isset($_POST['trySignIn'])) {
+    if(isset($_POST['trySignIn'])) { //login
         $db = dbConnect();
         $email = mysqli_real_escape_string($db, $_POST['email']);
-        $password = $_POST['password']; //da escapare??
-        //controllo email/password vuota
+        $password = $_POST['password']; 
+        //check empty email/password
         if(empty($email))
             array_push($errors, "Email required");
         if(empty($password))
             array_push($errors, "Password required");
-        //controllo email valida
+        //check valid email
         if(!filter_var($email, FILTER_VALIDATE_EMAIL))
             array_push($errors, "Email is not valid");
-        //query
-        if (count($errors) == 0) {
-            $password = md5($password);
+        if (count($errors) == 0) { //if no error occurred
+            $password = md5($password); //md5
             $query = "SELECT * FROM email_password WHERE user_email='$email' AND user_password='$password'";
             $risultato = mysqli_query($db, $query);
-            if (mysqli_num_rows($risultato) == 1) {
+            if (mysqli_num_rows($risultato) == 1) { //success
               $_SESSION['email'] = $email;
               $_SESSION['time'] = time();
               setcookie("user", $email, time() + (86400 * 30), "/");
               $_SESSION['success'] = "You are now logged in";
               header('location: mainPage.php');
             }else {
-                array_push($errors, "Wrong email or password");
+                array_push($errors, "Wrong email or password"); //denied
             }
         }
         mysqli_close($db);
     }
 
-    if(isset($_POST['trySignUp'])) {
-        if (isset($_SESSION['time'])){ //se gia' loggato slogga
+    if(isset($_POST['trySignUp'])) { //register
+        if (isset($_SESSION['time'])){ //if logged logout before
             session_destroy();
             if (ini_get("session.use_cookies")) {
                 $params = session_get_cookie_params();
@@ -197,18 +196,18 @@
         $email = mysqli_real_escape_string($db, $_POST['email']);
         $password = $_POST['password'];
         $passwordAgain = $_POST['passwordAgain'];
-        //controllo 2 password diverse
+        //check 2 password match
         if($password !== $passwordAgain)
             array_push($errors,"Passwords must match");
-        //controllo email/password vuota
+        //check empty email/password
         if(empty($email))
             array_push($errors, "Email is required");
         if(empty($password))
             array_push($errors, "Password required");
-        //controllo email valida
+        //check valid email
         if(!filter_var($email, FILTER_VALIDATE_EMAIL))
             array_push($errors, "Email is not valid");
-        //controllo mail dublicata
+        //check unique email 
         mysqli_autocommit($db,false);
         if(!mysqli_query($db, "SELECT * FROM email_password FOR UPDATE"))
             echo "DBerror0";
@@ -218,7 +217,7 @@
         $test = mysqli_fetch_assoc($risposta);
         if ($test)
             array_push($errors,"Email already registered");
-        //controllo password lato server (robusta)
+        //check strong password serverside
         if (strlen($password) > 3) {
             $special_chars = preg_replace('/[A-Za-z0-9]/', "", $password);
             $numbers = preg_replace('/[A-Za-z]/',"",$password);
@@ -230,34 +229,38 @@
         else {
             array_push($errors,"Password can't be weak");
         }
-        //se non ci sono stati errori
+        //if non error occurred
         if(count($errors) == 0) {
-            $password = md5($password);
-            mysqli_autocommit($db, false);
+            $password = md5($password); //md5
+            mysqli_autocommit($db, false); //lock to avoid duplicate email
             if(!mysqli_query($db, "SELECT * FROM email_password FOR UPDATE"))
                 echo "DBerror0";
 			$query = "INSERT INTO email_password (user_email, user_password) VALUES ('$email', '$password')";
-			if(!mysqli_query($db, $query)){
+			if(!mysqli_query($db, $query)){ //try insert
                 array_push($errors,"Error Processing Request");
                 mysqli_rollback($db);
 		        mysqli_autocommit($db, true);
 			}
-			if(!mysqli_commit($db)){
+			if(!mysqli_commit($db)){ //try commit
 				array_push($errors,"Error Processing Request");
                 mysqli_rollback($db);
 		        mysqli_autocommit($db, true);
-			}
+			} //success, login
 			$_SESSION['email'] = $email;
 			$_SESSION['time'] = time();
 			setcookie("user", $email, time() + 120, "/");
 			$_SESSION['success'] = "Logged in";
             mysqli_autocommit($db, true);
+			mysqli_close($db);
             header('location: mainPage.php');
         }
-        mysqli_close($db);
+		else {
+			mysqli_autocommit($db, true);
+			mysqli_close($db);
+		}
     }
 
-    if(isset($_POST['SignOut'])) {
+    if(isset($_POST['SignOut'])) { //logiut
         $_SESSION=array();
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
@@ -268,60 +271,50 @@
         return false;
     }
 
-    if(isset($_POST['Submit'])) {
-        if(!checkSession()) { //non esce l'alert
-            header('location: SignInPage.php');
-        }
-        else {
-            echo "fa cose";
-        }
-        return;
-    }
-
-    function dbConnect() {
-        $connection = mysqli_connect("localhost","root","");
+    function dbConnect() { //database connection
+        $connection = mysqli_connect("localhost","root",""); //default on localhost mysql
         if(mysqli_connect_error())
             echo "Connection db failed";  
-        if(!mysqli_select_db($connection,"pd1_php_db"))
+        if(!mysqli_select_db($connection,"pd1_php_db")) //db name here
             echo "Selection db failed";  
         return $connection;
     }
 
-    function checkHttps(){
+    function checkHttps(){ //check https connection
         if (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == 'off') {
-            header("location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+            header("location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); //set https if http
             exit();
         }
     }
 
-    function checkSession() {
+    function checkSession() { //check if any current session 
         $t=time(); 
         $diff=0; 
         $new=false;
         if (isset($_SESSION['time'])){
             $t0=$_SESSION['time']; 
-            $diff=($t-$t0); // inactivity
+            $diff=($t-$t0); // inactivity time
         } else {
             $new=true;
         }
-        if ($new || ($diff > 120)) { //timeout session 2min
-            $_SESSION=array();
-            if (ini_get("session.use_cookies")) { // PHP using cookies to handle session
+        if ($new || ($diff > 120)) { //timeout if session > 2 min
+            $_SESSION=array(); //timeout
+            if (ini_get("session.use_cookies")) { 
                 $params = session_get_cookie_params();
                 setcookie(session_name(), '', time() - 3600*24, $params["path"],
                 $params["domain"], $params["secure"], $params["httponly"]);
             }
             session_destroy();
             return false;
-        } else {
+        } else { //session correctly open
             $_SESSION['time']=time(); // update time 
             return true;
         }       
     }
 
-    function checkCookie(){
+    function checkCookie(){ //check cookies use
         setcookie("test_cookie", "test", time() + 3600, '/');
-        if(count($_COOKIE) == 0){
+        if(count($_COOKIE) == 0){ //not using
             echo "Enable cookies to navigate this site";
             exit();
         }

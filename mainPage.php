@@ -24,7 +24,10 @@
 </head>
 
 <body>
+    <!-- sidebar -->
     <?php include('sidebar.php'); ?>
+	<!-- table -->
     <?php include('mainTable.php'); ?>
+	<!-- log -->
     <?php include('errorLog.php'); ?>
 </body>

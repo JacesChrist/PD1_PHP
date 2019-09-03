@@ -17,7 +17,7 @@
 </head>
 
 <body>
-
+	<!-- sidebar -->
     <?php include('sidebar.php') ?>
     <div class='main'>
         <form method="post">
@@ -34,5 +34,6 @@
             </div>
         </form>
     </div>
+	<!-- log -->
     <?php include('errorLog.php'); ?>
 </body>

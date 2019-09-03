@@ -3,11 +3,12 @@
 
 <div class="sidenav">
     <?php 
+		//sidebar button, switch on relative current page
         switch (explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[count(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) - 1]) { //prende pagina corrente
             case ('mainPage.php'): //mainPage
             { 
-                //SignOut
-                echo "<form action='serverFunctions.php' method='POST'> <button type='submit' class='sidebarButton' name='SignOut'>SignOut</button> </form>";
+                //Logout
+                echo "<form action='serverFunctions.php' method='POST'> <button type='submit' class='sidebarButton' name='SignOut'>Logout</button> </form>";
                 //Submit
                 echo "<button id='submitbutton' class='sidebarButton' name='Submit'>Submit</button>";
                 //Unbook
@@ -61,21 +62,21 @@
                 dataType: "text"
             }).done(function (data) {
                 switch (data) {
-                    case ("notlogged"): {
+                    case ("notlogged"): { //not logged
                         alert("Timeout session");
                         document.location.href = 'SignInPage.php';
                         break;
                     }
-                    case ("anySlotNotFree"): {
+                    case ("anySlotNotFree"): { //slot not free
                         alert("Any slot is already booked");
-                        document.location.href = 'mainPage.php';
+                        document.location.href = 'mainPage.php'; //refresh
                         break;
                     }
-                    case ("submitSuccess"): {
+                    case ("submitSuccess"): { //success
                         document.location.href = 'mainPage.php?Submit successfully';
                         break;
                     }
-                    default: {
+                    default: { //error db
                         alert("Error occurred\nPlease try again");
                         document.location.href = 'mainPage.php';
                         break;
@@ -83,7 +84,7 @@
                 }
             });
         } else {
-            $("#log").html("Select some slot");
+            $("#log").html("Select some slot"); //no slot selected
         }
     });
 </script>
@@ -99,20 +100,20 @@
             type: "POST",
         }).done(function (data) {
             switch (data) {
-                case ("notlogged"): {
+                case ("notlogged"): { //not logged
                     alert("Session timeout");
                     document.location.href = 'SignInPage.php';
                     break;
                 }
-                case ("nothingBookedYet"): {
+                case ("nothingBookedYet"): { //no booking yet
                     $("#log").html("Nothing booked yet");
                     break;
                 }
-                case ("unbooked"): {
+                case ("unbooked"): { //success
                     document.location.href = 'mainPage.php?Unbooked successfully'; //cambiare mostrare cambiamento
                     break;
                 }
-                default: {
+                default: { //error db
                     alert("Error occurred\nPlease try again");
                     document.location.href = 'mainPage.php';
                     break;
