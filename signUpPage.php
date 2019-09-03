@@ -22,19 +22,18 @@
     <div class='main'>
         <form name="SignIn" method="post" onsubmit="return checkPassword()">
             <div>
-                <label>Email: </label>
-                <input type="email" class="input" name="email" placeholder="Insert new user email" required />
+                <label>New email: </label>
+                <input type="email" class="input" name="email" placeholder="Insert new user email here" required />
             </div>
             <div>
                 <label>New password: </label>
-                <input id="password" class="input" type="password" name="password" placeholder="Insert new password" required />
+                <input id="password" class="input" type="password" name="password" placeholder="Insert new password here" required />
             </div>
             <div id="strength">
-                <br>
             </div>
             <div>
                 <label>New password again: </label>
-                <input id="passwordAgain" class="input" type="password" name="passwordAgain" placeholder="Repete new password" required />
+                <input id="passwordAgain" class="input" type="password" name="passwordAgain" placeholder="Repete new password here" required />
             </div>
             <div>
                 <button type="submit" class='button' name="trySignUp">Submit</button>
@@ -60,7 +59,7 @@
             var special_chars = password.replace(/[A-Za-z0-9]/g, '');
             var numbers = password.replace(/[^0-9]/g, '');
             if (special_chars.length < 2 && numbers.length < 1) {
-                $("#log").html("Passwords cant't be medium");
+                $("#log").html("Passwords cant't be medium<br>Add numbers or special characters");
                 return false;
             }
         }

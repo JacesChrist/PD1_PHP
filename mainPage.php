@@ -19,7 +19,7 @@
         SaveMyHealth
 </div>
     <div class='subTitle'>
-        User <?php echo $_SESSION['email']; ?>
+        User <?php echo $_SESSION['email']; ?> logged
     </div>
 </head>
 

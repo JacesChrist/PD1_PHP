@@ -1,7 +1,7 @@
 <LINK href="mainStyle.css" rel=stylesheet type="text/css">
 <script src="jquery-3.3.1.min.js"></script>
 
-<div id="log">
+<div id='log'>
     <?php
         if(isset($_SERVER['REQUEST_URI'])) {
             if(isset(parse_url($_SERVER['REQUEST_URI'])['query'])) {

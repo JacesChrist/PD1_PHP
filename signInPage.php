@@ -23,11 +23,11 @@
         <form method="post">
             <div class="form-group">
                 <label>Email:</label>
-                <input type="email" class="input" name="email" id="email" placeholder="Insert user email" required />
+                <input type="email" class="input" name="email" id="email" placeholder="Insert user email here" required />
             </div>
             <div class="form-group">
                 <label>Password:</label>
-                <input type="password" class="input" name="password" id="password" placeholder="Insert password" required />
+                <input type="password" class="input" name="password" id="password" placeholder="Insert password here" required />
             </div>
             <div>
                 <button type="submit" class='button' name="trySignIn">Submit</button>

@@ -17,7 +17,7 @@
                     echo "<tr>";
                     for($column = -1;$column < 5; $column++) {
                         if($column == -1) {
-                            echo "<td id='hour'>" . ($row + 8) . ":00</td>";
+                            echo "<td id='hour'>" . ($row + 8) . ":00 - ". ($row + 9) . ":00</td>";
                         }
                         else {
                             echo "<td id='" . $row . $column . "' ";
