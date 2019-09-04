@@ -275,7 +275,7 @@
         $connection = mysqli_connect("localhost","root",""); //default on localhost mysql
         if(mysqli_connect_error())
             echo "Connection db failed";  
-        if(!mysqli_select_db($connection,"pd1_php_db")) //db name here
+        if(!mysqli_select_db($connection,"s265542")) //db name here
             echo "Selection db failed";  
         return $connection;
     }
